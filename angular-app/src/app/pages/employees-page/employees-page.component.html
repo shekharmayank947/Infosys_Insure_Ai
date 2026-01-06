@@ -1,0 +1,289 @@
+<div class="space-y-6">
+  <!-- Header -->
+  <div>
+    <div class="flex items-center space-x-3 mb-2">
+      <div class="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg">
+        <lucide-angular [img]="UsersIcon" class="w-8 h-8 text-white"></lucide-angular>
+      </div>
+      <div>
+        <h1 class="text-gray-900 dark:text-white text-2xl font-bold">Employee Compliance Records</h1>
+        <p class="text-gray-600 dark:text-gray-400 font-medium">
+          View, track, and manage employee-submitted compliance issues
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700 hover:shadow-md transition">
+      <div class="flex items-start justify-between mb-4">
+        <div class="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+          <lucide-angular [img]="FileTextIcon" class="w-6 h-6 text-blue-600 dark:text-blue-400"></lucide-angular>
+        </div>
+      </div>
+      <p class="text-gray-600 dark:text-gray-400 mb-1 text-sm font-medium">Total Submissions</p>
+      <p class="text-gray-900 dark:text-white text-3xl font-bold">{{ stats().total }}</p>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700 hover:shadow-md transition">
+      <div class="flex items-start justify-between mb-4">
+        <div class="p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
+          <lucide-angular [img]="ClockIcon" class="w-6 h-6 text-yellow-600 dark:text-yellow-400"></lucide-angular>
+        </div>
+      </div>
+      <p class="text-gray-600 dark:text-gray-400 mb-1 text-sm font-medium">Pending Review</p>
+      <p class="text-gray-900 dark:text-white text-3xl font-bold">{{ stats().pending }}</p>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700 hover:shadow-md transition">
+      <div class="flex items-start justify-between mb-4">
+        <div class="p-3 bg-red-100 dark:bg-red-900/30 rounded-lg">
+          <lucide-angular [img]="AlertTriangleIcon" class="w-6 h-6 text-red-600 dark:text-red-400"></lucide-angular>
+        </div>
+      </div>
+      <p class="text-gray-600 dark:text-gray-400 mb-1 text-sm font-medium">Critical Issues</p>
+      <p class="text-gray-900 dark:text-white text-3xl font-bold">{{ stats().critical }}</p>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700 hover:shadow-md transition">
+      <div class="flex items-start justify-between mb-4">
+        <div class="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
+          <lucide-angular [img]="CheckCircleIcon" class="w-6 h-6 text-green-600 dark:text-green-400"></lucide-angular>
+        </div>
+      </div>
+      <p class="text-gray-600 dark:text-gray-400 mb-1 text-sm font-medium">Resolved</p>
+      <p class="text-gray-900 dark:text-white text-3xl font-bold">{{ stats().resolved }}</p>
+    </div>
+  </div>
+
+  <!-- Filters and Search -->
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
+      <div class="flex items-center space-x-4 overflow-x-auto pb-2 xl:pb-0 scrollbar-hide">
+        <lucide-angular [img]="FilterIcon" class="w-5 h-5 text-gray-600 dark:text-gray-400 flex-shrink-0"></lucide-angular>
+        <div class="flex space-x-2">
+          <button
+            *ngFor="let status of ['all', 'pending', 'in-review', 'resolved', 'rejected']"
+            (click)="filterStatus.set(status)"
+            [class]="'px-4 py-2 rounded-lg transition text-sm font-semibold whitespace-nowrap ' + (filterStatus() === status ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 border border-transparent dark:border-gray-600')"
+          >
+            {{ status === 'all' ? 'All' : (status.charAt(0).toUpperCase() + status.slice(1)) }}
+          </button>
+        </div>
+      </div>
+
+      <div class="relative w-full xl:max-w-md">
+        <lucide-angular [img]="SearchIcon" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></lucide-angular>
+        <input
+          type="text"
+          placeholder="Search by employee, issue, or policy..."
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+          class="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition shadow-sm"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Compliance Records Table -->
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 dark:bg-gray-700/50">
+          <tr>
+            <th class="px-6 py-4 text-left text-gray-700 dark:text-gray-300 font-bold uppercase tracking-wider">ID</th>
+            <th class="px-6 py-4 text-left text-gray-700 dark:text-gray-300 font-bold uppercase tracking-wider">Employee</th>
+            <th class="px-6 py-4 text-left text-gray-700 dark:text-gray-300 font-bold uppercase tracking-wider">Issue</th>
+            <th class="px-6 py-4 text-left text-gray-700 dark:text-gray-300 font-bold uppercase tracking-wider">Policy</th>
+            <th class="px-6 py-4 text-left text-gray-700 dark:text-gray-300 font-bold uppercase tracking-wider">Severity</th>
+            <th class="px-6 py-4 text-left text-gray-700 dark:text-gray-300 font-bold uppercase tracking-wider">Status</th>
+            <th class="px-6 py-4 text-left text-gray-700 dark:text-gray-300 font-bold uppercase tracking-wider">Date</th>
+            <th class="px-6 py-4 text-left text-gray-700 dark:text-gray-300 font-bold uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+          <tr *ngIf="filteredRecords().length === 0">
+            <td colSpan="8" class="px-6 py-16 text-center">
+              <lucide-angular [img]="FileTextIcon" class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4"></lucide-angular>
+              <p class="text-gray-600 dark:text-gray-400 font-bold text-lg">No compliance records found</p>
+              <p class="text-gray-500 dark:text-gray-500 text-sm mt-1">Try adjusting your filters or search query</p>
+            </td>
+          </tr>
+          <tr
+            *ngFor="let record of filteredRecords()"
+            class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition group"
+          >
+            <td class="px-6 py-4 text-gray-900 dark:text-white font-medium">{{ record.id }}</td>
+            <td class="px-6 py-4">
+              <div>
+                <p class="text-gray-900 dark:text-white font-bold">{{ record.employeeName }}</p>
+                <p class="text-gray-500 dark:text-gray-400 text-xs">{{ record.employeeEmail }}</p>
+              </div>
+            </td>
+            <td class="px-6 py-4">
+              <p class="text-gray-900 dark:text-white font-medium">{{ record.issueTitle }}</p>
+              <p class="text-gray-500 dark:text-gray-400 text-[10px] uppercase font-bold tracking-tighter">
+                Type: {{ record.issueType.replace('-', ' ') }}
+              </p>
+            </td>
+            <td class="px-6 py-4 text-gray-700 dark:text-gray-300 font-medium">
+              {{ record.policyName }}
+            </td>
+            <td class="px-6 py-4">
+              <span [class]="'px-3 py-1 rounded-full text-[10px] font-bold uppercase ' + getSeverityColor(record.severity)">
+                {{ record.severity }}
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <select
+                [ngModel]="record.status"
+                (ngModelChange)="handleStatusChange(record.id, $event)"
+                [class]="'px-3 py-1 rounded-full text-xs font-bold outline-none cursor-pointer border-transparent transition ' + getStatusColor(record.status)"
+              >
+                <option value="pending">Pending</option>
+                <option value="in-review">In Review</option>
+                <option value="resolved">Resolved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </td>
+            <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-medium">
+              {{ record.submittedDate }}
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition">
+                <button
+                  (click)="handleViewDetails(record)"
+                  class="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/40 rounded-lg transition"
+                  title="View Details"
+                >
+                  <lucide-angular [img]="EyeIcon" class="w-5 h-5"></lucide-angular>
+                </button>
+                <button
+                  class="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition"
+                  title="Delete Record"
+                >
+                  <lucide-angular [img]="Trash2Icon" class="w-5 h-5"></lucide-angular>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div *ngIf="showDetailModal() && selectedRecord()" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl scale-in ring-1 ring-black/5">
+      <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between sticky top-0 bg-white dark:bg-gray-800 z-10">
+        <h2 class="text-gray-900 dark:text-white text-xl font-bold">Compliance Record Details</h2>
+        <button
+          (click)="closeModal()"
+          class="p-2 text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"
+        >
+          <lucide-angular [img]="XCircleIcon" class="w-7 h-7"></lucide-angular>
+        </button>
+      </div>
+
+      <div class="p-8 space-y-8" *ngIf="selectedRecord() as record">
+        <div class="grid grid-cols-2 gap-8">
+          <div>
+            <p class="text-gray-500 dark:text-gray-500 text-[10px] uppercase font-bold tracking-widest mb-1.5">Record ID</p>
+            <p class="text-gray-900 dark:text-white font-mono font-bold">{{ record.id }}</p>
+          </div>
+          <div>
+            <p class="text-gray-500 dark:text-gray-500 text-[10px] uppercase font-bold tracking-widest mb-1.5">Submitted Date</p>
+            <p class="text-gray-900 dark:text-white font-bold">{{ record.submittedDate }}</p>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-gray-500 dark:text-gray-500 text-[10px] uppercase font-bold tracking-widest mb-2">Employee Information</p>
+          <div class="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl border border-gray-100 dark:border-gray-700">
+            <p class="text-gray-900 dark:text-white font-bold text-lg">{{ record.employeeName }}</p>
+            <p class="text-gray-600 dark:text-gray-400 text-sm">{{ record.employeeEmail }}</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <p class="text-gray-500 dark:text-gray-500 text-[10px] uppercase font-bold tracking-widest mb-1.5">Policy Association</p>
+            <p class="text-gray-900 dark:text-white font-semibold">{{ record.policyName }}</p>
+          </div>
+          <div>
+            <p class="text-gray-500 dark:text-gray-500 text-[10px] uppercase font-bold tracking-widest mb-1.5">Document Context</p>
+            <p class="text-gray-900 dark:text-white font-semibold">{{ record.documentName }}</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-8">
+          <div>
+            <p class="text-gray-500 dark:text-gray-500 text-[10px] uppercase font-bold tracking-widest mb-1.5">Issue Type</p>
+            <p class="text-gray-900 dark:text-white font-semibold capitalize">
+              {{ record.issueType.replace('-', ' ') }}
+            </p>
+          </div>
+          <div>
+            <p class="text-gray-500 dark:text-gray-500 text-[10px] uppercase font-bold tracking-widest mb-1.5">Severity Level</p>
+            <span
+              [class]="'inline-flex px-4 py-1.5 rounded-full text-xs font-bold uppercase ' + getSeverityColor(record.severity)"
+            >
+              {{ record.severity }}
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-gray-500 dark:text-gray-500 text-[10px] uppercase font-bold tracking-widest mb-2">Issue Title & Summary</p>
+          <p class="text-gray-900 dark:text-white font-bold mb-2">{{ record.issueTitle }}</p>
+          <p class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl border border-dotted border-gray-200 dark:border-gray-700">
+            {{ record.issueDescription }}
+          </p>
+        </div>
+
+        <div *ngIf="record.complianceScore">
+          <p class="text-gray-500 dark:text-gray-500 text-[10px] uppercase font-bold tracking-widest mb-3">AI Compliance Score Integration</p>
+          <div class="flex items-center space-x-6">
+            <div class="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-4 shadow-inner overflow-hidden">
+              <div
+                class="bg-gradient-to-r from-amber-500 to-orange-600 h-4 rounded-full transition-all duration-1000"
+                [style.width.%]="record.complianceScore"
+              ></div>
+            </div>
+            <span class="text-gray-900 dark:text-white font-black text-xl italic">
+              {{ record.complianceScore }}%
+            </span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900/30 rounded-2xl border border-gray-100 dark:border-gray-700">
+          <div>
+            <p class="text-gray-500 dark:text-gray-500 text-[10px] uppercase font-bold tracking-widest mb-1">Workflow Status</p>
+            <span
+              [class]="'inline-flex px-5 py-2 rounded-full text-xs font-black uppercase tracking-tighter ' + getStatusColor(record.status)"
+            >
+              {{ record.status }}
+            </span>
+          </div>
+          <button class="flex items-center space-x-2 text-blue-600 dark:text-blue-400 font-bold text-sm hover:underline">
+            <lucide-angular [img]="EditIcon" class="w-4 h-4"></lucide-angular>
+            <span>Modify Status</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="p-8 border-t border-gray-100 dark:border-gray-700 flex justify-end space-x-4 sticky bottom-0 bg-white dark:bg-gray-800 z-10">
+        <button
+          (click)="closeModal()"
+          class="px-8 py-3.5 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition font-bold"
+        >
+          Dismiss
+        </button>
+        <button class="px-8 py-3.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-black shadow-xl shadow-blue-500/20 active:scale-95">
+          Process Record
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

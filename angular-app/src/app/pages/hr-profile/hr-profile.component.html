@@ -1,0 +1,211 @@
+<div class="max-w-6xl mx-auto space-y-6">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h1 class="text-gray-900 dark:text-white mb-1 text-2xl font-black">HR Profile</h1>
+      <p class="text-gray-600 dark:text-gray-400 font-medium tracking-tight">Manage your institutional account settings and administrative preferences</p>
+    </div>
+    <div *ngIf="!isEditing()" class="flex">
+        <button
+          (click)="isEditing.set(true)"
+          class="flex items-center space-x-2 px-6 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-black text-sm shadow-xl shadow-blue-500/20 active:scale-95"
+        >
+          <lucide-angular [img]="EditIcon" class="w-4 h-4"></lucide-angular>
+          <span>Modify Account</span>
+        </button>
+    </div>
+    <div *ngIf="isEditing()" class="flex space-x-3">
+        <button
+          (click)="handleSaveProfile()"
+          class="flex items-center space-x-2 px-6 py-2.5 bg-green-600 text-white rounded-xl hover:bg-green-700 transition font-black text-sm shadow-xl shadow-green-500/20 active:scale-95"
+        >
+          <lucide-angular [img]="SaveIcon" class="w-4 h-4"></lucide-angular>
+          <span>Commit Changes</span>
+        </button>
+        <button
+          (click)="handleCancelEdit()"
+          class="flex items-center space-x-2 px-6 py-2.5 border-2 border-gray-100 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 transition font-bold text-sm"
+        >
+          <lucide-angular [img]="XIcon" class="w-4 h-4"></lucide-angular>
+          <span>Discard</span>
+        </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Profile Card -->
+    <div class="lg:col-span-2 space-y-8">
+      <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 p-8">
+        <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
+          <div class="relative group">
+            <div class="w-32 h-32 rounded-3xl overflow-hidden border-4 border-blue-50 dark:border-blue-900 shadow-xl group-hover:scale-[1.02] transition duration-500">
+              <img *ngIf="profilePicture()" [src]="profilePicture()" alt="HR Avatar" class="w-full h-full object-cover" />
+              <div *ngIf="!profilePicture()" class="w-full h-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center">
+                <lucide-angular [img]="UserIcon" class="w-16 h-16 text-white"></lucide-angular>
+              </div>
+            </div>
+            <button
+              *ngIf="isEditing()"
+              (click)="fileInput.click()"
+              class="absolute -bottom-2 -right-2 p-2.5 bg-blue-600 text-white rounded-xl shadow-xl hover:bg-blue-700 transition-all duration-300 transform group-hover:scale-110 active:scale-90"
+            >
+              <lucide-angular [img]="UploadIcon" class="w-4 h-4"></lucide-angular>
+            </button>
+            <input #fileInput type="file" (change)="handleProfilePictureChange($event)" class="hidden" accept="image/*" />
+          </div>
+
+          <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+            <div>
+              <label class="block text-gray-400 text-[10px] font-black uppercase tracking-widest mb-2">Legal Identity</label>
+              <div class="relative">
+                <lucide-angular [img]="UserIcon" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></lucide-angular>
+                <input
+                  type="text"
+                  [ngModel]="profile().fullName"
+                  (ngModelChange)="updateProfileField('fullName', $event)"
+                  [disabled]="!isEditing()"
+                  [class]="'w-full pl-11 pr-5 py-3.5 border-2 rounded-2xl transition font-black text-sm ' + (isEditing() ? 'border-blue-100 dark:border-blue-900/50 focus:border-blue-500 bg-white dark:bg-gray-900' : 'border-transparent bg-gray-50/50 dark:bg-gray-900/50 text-gray-700 dark:text-gray-300')"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="block text-gray-400 text-[10px] font-black uppercase tracking-widest mb-2">Institutional Email</label>
+              <div class="relative">
+                <lucide-angular [img]="MailIcon" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></lucide-angular>
+                <input
+                  type="email"
+                  [ngModel]="profile().email"
+                  [disabled]="true"
+                  class="w-full pl-11 pr-5 py-3.5 border-2 border-transparent bg-gray-50/50 dark:bg-gray-900/50 text-gray-700 dark:text-gray-300 rounded-2xl font-black text-sm cursor-not-allowed"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="block text-gray-400 text-[10px] font-black uppercase tracking-widest mb-2">Administrative ID</label>
+              <div class="relative">
+                <lucide-angular [img]="ShieldIcon" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></lucide-angular>
+                <input
+                  type="text"
+                  [value]="profile().hrId"
+                  [disabled]="true"
+                  class="w-full pl-11 pr-5 py-3.5 border-2 border-transparent bg-gray-50/50 dark:bg-gray-900/50 text-gray-500 dark:text-gray-500 rounded-2xl font-black text-xs tracking-widest cursor-not-allowed"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="block text-gray-400 text-[10px] font-black uppercase tracking-widest mb-2">Assigned Division</label>
+              <div class="relative">
+                <input
+                  type="text"
+                  [value]="profile().department"
+                  [disabled]="true"
+                  class="w-full px-5 py-3.5 border-2 border-transparent bg-gray-50/50 dark:bg-gray-900/50 text-gray-700 dark:text-gray-300 rounded-2xl font-black text-sm cursor-not-allowed"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity Summary -->
+      <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 p-8 overflow-hidden relative">
+        <div class="absolute -right-16 -bottom-16 w-64 h-64 bg-blue-600/5 rounded-full blur-3xl"></div>
+        
+        <div class="flex items-center space-x-3 mb-8 relative z-10">
+          <div class="w-1.5 h-6 bg-blue-600 rounded-full"></div>
+          <h3 class="text-gray-900 dark:text-white text-xl font-black">Performance Analytics</h3>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
+          <div class="p-6 bg-blue-50/50 dark:bg-blue-900/10 rounded-2xl border border-blue-100 dark:border-blue-900/20 group hover:shadow-xl hover:shadow-blue-500/5 transition duration-500">
+            <lucide-angular [img]="FileTextIcon" class="w-5 h-5 text-blue-600 dark:text-blue-400 mb-4"></lucide-angular>
+            <p class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1">Policies</p>
+            <p class="text-gray-900 dark:text-white text-2xl font-black">{{ activitySummary.policiesUploaded }}</p>
+          </div>
+          <div class="p-6 bg-purple-50/50 dark:bg-purple-900/10 rounded-2xl border border-purple-100 dark:border-purple-900/20 group hover:shadow-xl hover:shadow-purple-500/5 transition duration-500">
+            <lucide-angular [img]="UsersIcon" class="w-5 h-5 text-purple-600 dark:text-purple-400 mb-4"></lucide-angular>
+            <p class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1">Managed</p>
+            <p class="text-gray-900 dark:text-white text-2xl font-black">{{ activitySummary.employeesManaged }}</p>
+          </div>
+          <div class="p-6 bg-emerald-50/50 dark:bg-emerald-900/10 rounded-2xl border border-emerald-100 dark:border-emerald-900/20 group hover:shadow-xl hover:shadow-emerald-500/5 transition duration-500">
+            <lucide-angular [img]="ShieldIcon" class="w-5 h-5 text-emerald-600 dark:text-emerald-400 mb-4"></lucide-angular>
+            <p class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1">Compliant</p>
+            <p class="text-gray-900 dark:text-white text-2xl font-black">{{ activitySummary.complianceReviewed }}</p>
+          </div>
+          <div class="p-6 bg-amber-50/50 dark:bg-amber-900/10 rounded-2xl border border-amber-100 dark:border-amber-900/20 group hover:shadow-xl hover:shadow-amber-500/5 transition duration-500">
+            <lucide-angular [img]="BarChartIcon" class="w-5 h-5 text-amber-600 dark:text-amber-400 mb-4"></lucide-angular>
+            <p class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1">Reports</p>
+            <p class="text-gray-900 dark:text-white text-2xl font-black">{{ activitySummary.reportsGenerated }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side Panel -->
+    <div class="space-y-8">
+      <!-- Permissions -->
+      <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 p-8">
+        <h3 class="text-gray-900 dark:text-white text-lg font-black mb-6">Access Privileges</h3>
+        <div class="space-y-3">
+          <div *ngFor="let p of systemPermissions" class="flex items-center justify-between p-3.5 bg-gray-50/50 dark:bg-gray-900/50 rounded-xl border border-gray-100 dark:border-gray-800">
+            <span class="text-gray-700 dark:text-gray-300 font-bold text-xs uppercase tracking-tighter">{{ p.name }}</span>
+            <lucide-angular [img]="CheckIcon" class="w-4 h-4 text-emerald-500"></lucide-angular>
+          </div>
+        </div>
+        <div class="mt-6 p-4 bg-blue-600 rounded-2xl text-white shadow-xl shadow-blue-500/20 relative overflow-hidden group">
+            <div class="absolute right-0 top-0 w-24 h-24 bg-white/10 rounded-full -translate-x-12 -translate-y-12"></div>
+            <p class="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">Authority Level</p>
+            <p class="text-sm font-black">{{ profile().systemRole }}</p>
+        </div>
+      </div>
+
+      <!-- Security -->
+      <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 p-8">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-gray-900 dark:text-white text-lg font-black">Security Vault</h3>
+            <lucide-angular [img]="LockIcon" class="w-5 h-5 text-blue-600"></lucide-angular>
+        </div>
+        
+        <div *ngIf="!showPasswordChange()" class="space-y-4">
+            <p class="text-gray-500 dark:text-gray-400 font-medium text-xs leading-relaxed">
+                Your institutional login is protected by enterprise-grade encryption and 2FA.
+            </p>
+            <button
+              (click)="showPasswordChange.set(true)"
+              class="w-full px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl hover:bg-gray-800 transition font-black text-xs uppercase tracking-widest active:scale-[0.98]"
+            >
+              Rotate Password
+            </button>
+        </div>
+
+        <div *ngIf="showPasswordChange()" class="space-y-4 animate-in slide-in-from-right-4 duration-300">
+             <input
+              type="password"
+              placeholder="Current Hash"
+              [ngModel]="passwordData().currentPassword"
+              (ngModelChange)="updatePasswordData('currentPassword', $event)"
+              class="w-full px-4 py-3 border-2 border-gray-100 dark:border-gray-700 dark:bg-gray-900 dark:text-white rounded-xl font-bold text-xs outline-none focus:border-blue-500"
+            />
+            <input
+              type="password"
+              placeholder="New Credentials"
+              [ngModel]="passwordData().newPassword"
+              (ngModelChange)="updatePasswordData('newPassword', $event)"
+              class="w-full px-4 py-3 border-2 border-gray-100 dark:border-gray-700 dark:bg-gray-900 dark:text-white rounded-xl font-bold text-xs outline-none focus:border-blue-500"
+            />
+            <input
+              type="password"
+              placeholder="Confirm Hash"
+              [ngModel]="passwordData().confirmPassword"
+              (ngModelChange)="updatePasswordData('confirmPassword', $event)"
+              class="w-full px-4 py-3 border-2 border-gray-100 dark:border-gray-700 dark:bg-gray-900 dark:text-white rounded-xl font-bold text-xs outline-none focus:border-blue-500"
+            />
+            <div class="flex gap-2">
+                <button (click)="handlePasswordChange()" class="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest">Update</button>
+                <button (click)="showPasswordChange.set(false)" class="px-4 py-3 border-2 border-gray-100 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-black text-[10px] uppercase tracking-widest">X</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

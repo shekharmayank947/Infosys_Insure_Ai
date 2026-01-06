@@ -1,0 +1,189 @@
+<div class="space-y-6">
+  <!-- Header -->
+  <div>
+    <h1 class="text-gray-900 dark:text-white mb-2 text-2xl font-bold">HR Dashboard</h1>
+    <p class="text-gray-600 dark:text-gray-400">Welcome back, {{ userName }}! Manage employee policies and approvals</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <app-dashboard-card
+      title="Policy Status"
+      value="Active"
+      [icon]="FileTextIcon"
+      trend="142 total policies"
+      [trendUp]="true"
+      bgColor="from-blue-600 to-blue-700"
+    ></app-dashboard-card>
+    <app-dashboard-card
+      title="Employee Requests"
+      value="23"
+      [icon]="UserCheckIcon"
+      trend="8 new today"
+      [trendUp]="true"
+      bgColor="from-purple-600 to-purple-700"
+    ></app-dashboard-card>
+    <app-dashboard-card
+      title="Compliance Rate"
+      value="94%"
+      [icon]="ShieldCheckIcon"
+      trend="Up from last month"
+      [trendUp]="true"
+      bgColor="from-green-500 to-emerald-600"
+    ></app-dashboard-card>
+    <app-dashboard-card
+      title="Team Members"
+      value="84"
+      [icon]="UsersIcon"
+      trend="+6 this month"
+      [trendUp]="true"
+      bgColor="from-amber-500 to-orange-600"
+    ></app-dashboard-card>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h3 class="text-gray-900 dark:text-white mb-4 text-lg font-semibold">Quick Actions</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <button
+        (click)="navigateTo('/policy-upload')"
+        class="flex items-center space-x-3 p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition group"
+      >
+        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50 transition">
+          <lucide-angular [img]="UploadIcon" class="w-6 h-6 text-blue-600 dark:text-blue-400"></lucide-angular>
+        </div>
+        <div class="text-left">
+          <p class="text-gray-900 dark:text-white font-medium">Upload Policy</p>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">Add new policy document</p>
+        </div>
+      </button>
+
+      <button
+        (click)="navigateTo('/compliance-checker')"
+        class="flex items-center space-x-3 p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/10 transition group"
+      >
+        <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center group-hover:bg-purple-200 dark:group-hover:bg-purple-900/50 transition">
+          <lucide-angular [img]="ShieldCheckIcon" class="w-6 h-6 text-purple-600 dark:text-purple-400"></lucide-angular>
+        </div>
+        <div class="text-left">
+          <p class="text-gray-900 dark:text-white font-medium">Check Compliance</p>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">Run AI compliance scan</p>
+        </div>
+      </button>
+
+      <button
+        (click)="navigateTo('/employees')"
+        class="flex items-center space-x-3 p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-green-500 hover:bg-green-50 dark:hover:bg-green-900/10 transition group"
+      >
+        <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center group-hover:bg-green-200 dark:group-hover:bg-green-900/50 transition">
+          <lucide-angular [img]="UsersIcon" class="w-6 h-6 text-green-600 dark:text-green-400"></lucide-angular>
+        </div>
+        <div class="text-left">
+          <p class="text-gray-900 dark:text-white font-medium">View Employees</p>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">Manage team members</p>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Employee Compliance Issues Alert -->
+  <div *ngIf="complianceStats.pending > 0" class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl shadow-sm border border-amber-200 dark:border-amber-800 p-6">
+    <div class="flex items-start justify-between flex-wrap gap-4">
+      <div class="flex items-start space-x-4">
+        <div class="p-3 bg-amber-100 dark:bg-amber-900/30 rounded-xl">
+          <lucide-angular [img]="AlertTriangleIcon" class="w-8 h-8 text-amber-600 dark:text-amber-400"></lucide-angular>
+        </div>
+        <div>
+          <h3 class="text-gray-900 dark:text-white mb-2 text-lg font-semibold">Employee Compliance Issues Require Attention</h3>
+          <p class="text-gray-700 dark:text-gray-300 mb-4 max-w-2xl">
+            {{ complianceStats.pending }} employee-submitted compliance issues are pending review. 
+            <span *ngIf="complianceStats.critical > 0">Including {{ complianceStats.critical }} critical issues that need immediate attention.</span>
+          </p>
+          <div class="flex items-center space-x-4 flex-wrap gap-y-2">
+            <div>
+              <p class="text-gray-600 dark:text-gray-400 text-xs uppercase tracking-wider">Total</p>
+              <p class="text-gray-900 dark:text-white font-bold">{{ complianceStats.total }}</p>
+            </div>
+            <div class="border-l border-gray-300 dark:border-gray-700 h-8 mx-2"></div>
+            <div>
+              <p class="text-gray-600 dark:text-gray-400 text-xs uppercase tracking-wider">Pending</p>
+              <p class="text-amber-700 dark:text-amber-400 font-bold">{{ complianceStats.pending }}</p>
+            </div>
+            <div class="border-l border-gray-300 dark:border-gray-700 h-8 mx-2"></div>
+            <div>
+              <p class="text-gray-600 dark:text-gray-400 text-xs uppercase tracking-wider">Critical</p>
+              <p class="text-red-700 dark:text-red-400 font-bold">{{ complianceStats.critical }}</p>
+            </div>
+            <div class="border-l border-gray-300 dark:border-gray-700 h-8 mx-2"></div>
+            <div>
+              <p class="text-gray-600 dark:text-gray-400 text-xs uppercase tracking-wider">Resolved</p>
+              <p class="text-green-700 dark:text-green-400 font-bold">{{ complianceStats.resolved }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button
+        (click)="navigateTo('/employees')"
+        class="px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition whitespace-nowrap font-medium"
+      >
+        View All Issues
+      </button>
+    </div>
+  </div>
+
+  <!-- Employee Policy Mapping Table -->
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="text-gray-900 dark:text-white text-lg font-semibold">Employee Policy Mapping</h3>
+      <button class="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium">Export Report</button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-gray-200 dark:border-gray-700">
+            <th class="text-left py-3 px-4 text-gray-700 dark:text-gray-300 text-sm font-semibold">Employee Name</th>
+            <th class="text-left py-3 px-4 text-gray-700 dark:text-gray-300 text-sm font-semibold">Department</th>
+            <th class="text-left py-3 px-4 text-gray-700 dark:text-gray-300 text-sm font-semibold">Policies Assigned</th>
+            <th class="text-left py-3 px-4 text-gray-700 dark:text-gray-300 text-sm font-semibold">Status</th>
+            <th class="text-left py-3 px-4 text-gray-700 dark:text-gray-300 text-sm font-semibold">Compliance</th>
+            <th class="text-left py-3 px-4 text-gray-700 dark:text-gray-300 text-sm font-semibold">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let employee of employeePolicies" class="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition">
+            <td class="py-4 px-4 text-gray-900 dark:text-white font-medium">{{ employee.name }}</td>
+            <td class="py-4 px-4 text-gray-600 dark:text-gray-400 text-sm">{{ employee.department }}</td>
+            <td class="py-4 px-4 text-gray-600 dark:text-gray-400 text-sm">{{ employee.policies }}</td>
+            <td class="py-4 px-4">
+              <span
+                [class]="'px-3 py-1 rounded-full text-xs font-medium ' + (
+                  employee.status === 'Complete'
+                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                    : employee.status === 'Pending'
+                    ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                    : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                )"
+              >
+                {{ employee.status }}
+              </span>
+            </td>
+            <td class="py-4 px-4">
+              <div class="flex items-center space-x-2">
+                <div class="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2 min-w-[100px]">
+                  <div
+                    [class]="'h-2 rounded-full ' + (employee.compliance >= 80 ? 'bg-green-500' : 'bg-amber-500')"
+                    [style.width.%]="employee.compliance"
+                  ></div>
+                </div>
+                <span class="text-gray-700 dark:text-gray-300 text-sm font-medium">{{ employee.compliance }}%</span>
+              </div>
+            </td>
+            <td class="py-4 px-4">
+              <button class="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium">View</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

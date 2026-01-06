@@ -1,0 +1,61 @@
+<!-- Mobile Menu Button -->
+<button
+  (click)="toggleSidebar()"
+  class="lg:hidden fixed top-4 left-4 z-50 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2 rounded-lg shadow-lg"
+>
+  <lucide-angular [img]="isOpen() ? XIcon : MenuIcon" class="w-6 h-6"></lucide-angular>
+</button>
+
+<!-- Mobile Overlay -->
+<div 
+  *ngIf="isOpen()"
+  class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
+  (click)="closeSidebar()"
+></div>
+
+<!-- Sidebar -->
+<aside
+  [class]="'fixed top-0 left-0 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-lg z-30 transition-transform lg:translate-x-0 ' + (isOpen() ? 'translate-x-0' : '-translate-x-full lg:translate-x-0')"
+>
+  <div class="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-purple-600">
+    <a [routerLink]="dashboardPath" (click)="closeSidebar()" class="flex items-center space-x-3 text-white">
+      <lucide-angular [img]="ShieldIcon" class="w-8 h-8"></lucide-angular>
+      <div>
+        <div class="font-bold">InsurAI</div>
+        <p class="text-blue-100 opacity-90 text-sm">Policy Automation</p>
+      </div>
+    </a>
+  </div>
+
+  <nav class="p-4 space-y-2">
+    <a
+      *ngFor="let item of menuItems"
+      [routerLink]="item.path"
+      routerLinkActive="bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
+      [routerLinkActiveOptions]="{exact: true}"
+      (click)="closeSidebar()"
+      class="flex items-center space-x-3 px-4 py-3 rounded-lg transition text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+    >
+      <lucide-angular [img]="item.icon" class="w-5 h-5"></lucide-angular>
+      <span>{{ item.label }}</span>
+    </a>
+  </nav>
+
+  <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+    <div *ngIf="role === 'employee'" class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-4 rounded-lg">
+      <p class="text-gray-800 dark:text-gray-200 mb-2 font-medium">Need Help?</p>
+      <p class="text-gray-600 dark:text-gray-400 mb-3 text-sm">Contact support team</p>
+      <a
+        routerLink="/support"
+        (click)="closeSidebar()"
+        class="block w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition text-center text-sm font-medium"
+      >
+        Get Support
+      </a>
+    </div>
+    <div *ngIf="role === 'hr'" class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-4 rounded-lg text-center">
+      <lucide-angular [img]="ShieldIcon" class="w-8 h-8 mx-auto mb-2 text-blue-600 dark:text-blue-400"></lucide-angular>
+      <p class="text-gray-700 dark:text-gray-300 text-sm font-medium">HR Administrator</p>
+    </div>
+  </div>
+</aside>

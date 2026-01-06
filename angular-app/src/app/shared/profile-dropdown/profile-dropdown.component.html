@@ -1,0 +1,71 @@
+<div class="relative">
+  <!-- Profile Button -->
+  <button
+    (click)="toggleDropdown()"
+    class="flex items-center space-x-3 p-2 pr-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
+    aria-label="User menu"
+  >
+    <!-- Avatar -->
+    <div class="w-9 h-9 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white overflow-hidden shadow-sm">
+      <ng-container *ngIf="profileService.profile() as profile">
+        <img 
+          *ngIf="false" 
+          [src]="''" 
+          [alt]="profile.fullName" 
+          class="w-full h-full object-cover" 
+        />
+        <span class="font-medium">
+          {{ getInitials(profile.fullName) }}
+        </span>
+      </ng-container>
+    </div>
+
+    <!-- Name (hidden on mobile) -->
+    <span *ngIf="profileService.profile() as profile" class="hidden md:block text-gray-700 dark:text-gray-200 max-w-[120px] truncate">
+      {{ profile.fullName.split(' ')[0] }}
+    </span>
+
+    <!-- Chevron Icon -->
+    <lucide-angular 
+      [img]="ChevronDownIcon"
+      class="w-4 h-4 text-gray-600 dark:text-gray-400 transition-transform duration-200"
+      [class.rotate-180]="isOpen()"
+    ></lucide-angular>
+  </button>
+
+  <!-- Dropdown Menu -->
+  <div *ngIf="isOpen()" class="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 py-2 z-50 animate-fadeIn">
+    <!-- User Info Section -->
+    <div *ngIf="profileService.profile() as profile" class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+      <p class="text-gray-900 dark:text-gray-100 truncate font-medium">
+        {{ profile.fullName }}
+      </p>
+      <p class="text-gray-500 dark:text-gray-400 truncate text-sm">
+        {{ profile.email }}
+      </p>
+    </div>
+
+    <!-- Menu Items -->
+    <div class="py-2">
+      <!-- Profile Settings -->
+      <button
+        (click)="handleProfileSettings()"
+        class="w-full flex items-center space-x-3 px-4 py-2.5 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150"
+      >
+        <lucide-angular [img]="SettingsIcon" class="w-4 h-4 text-gray-500 dark:text-gray-400"></lucide-angular>
+        <span>Profile Settings</span>
+      </button>
+    </div>
+
+    <!-- Sign Out Section -->
+    <div class="border-t border-gray-200 dark:border-gray-700 pt-2 pb-1">
+      <button
+        (click)="handleSignOut()"
+        class="w-full flex items-center space-x-3 px-4 py-2.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-150"
+      >
+        <lucide-angular [img]="LogOutIcon" class="w-4 h-4"></lucide-angular>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </div>
+</div>

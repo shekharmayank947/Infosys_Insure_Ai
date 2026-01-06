@@ -1,0 +1,936 @@
+﻿
+> angular-app@0.0.0 build
+> ng build
+
+[33mΓ¥»[39m Building...
+[32mΓ£ö[39m Building...
+Application bundle generation failed. [8.487 seconds] - 2026-01-05T07:09:27.651Z
+
+node.exe : [1m[31m[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2322: Type '() => Promise<typeof 
+LayoutComponent>' is not assignable to 
+type 'Type<any>'.
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" 
+"C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecifie 
+   d: ([1m[31m[31mX...pe 'Type<any>'.  
+  :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeComma 
+   ndError
+ 
+  Type '() => Promise<typeof 
+LayoutComponent>' provides no match for 
+the signature 'new (...args: any[]): 
+any'.[0m [1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/app.routes.ts:12:4:
+[37m      12 Γöé     
+[32mcomponent[37m: () => import('./share
+d/layout/layout.component').th...
+         Γò╡     [32m~~~~~~~~~[0m
+
+  The expected type comes from property 
+'component' which is declared here on 
+type 'Route'
+
+    node_modules/@angular/router/types/_ro
+uter_module-chunk.d.ts:869:4:
+[37m      869 Γöé     
+[32mcomponent[37m?: Type<any>;
+          Γò╡     [32m~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2307: Cannot find module './pages/hr
+-manager-dashboard/hr-manager-dashboard.co
+mponent' or its corresponding type 
+declarations.[0m [1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/app.routes.ts:22:36:
+[37m      22 Γöé ...=> import([32m'./pag
+es/hr-manager-dashboard/hr-manager-dashboa
+rd.co[37m...
+         Γò╡              [32m~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2339: Property 'name' does not 
+exist on type 'UserProfile'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/compliance-checker/compl
+iance-checker.component.ts:208:28:
+[37m      208 Γöé       employeeName: 
+profile.[32mname[37m,
+          Γò╡                             
+[32m~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2339: Property 'name' does not 
+exist on type 'UserProfile'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/employee-dashboard/emplo
+yee-dashboard.component.ts:54:42:
+[37m      54 Γöé     return this.profileS
+ervice.profile()?.[32mname[37m || 
+'Employee';
+         Γò╡                              
+             [32m~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2339: Property 'records' does not 
+exist on type 'ComplianceService'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/employees-page/employees
+-page.component.ts:48:50:
+[37m      48 Γöé   records = computed(() 
+=> this.complianceService.[32mrecords[37
+m());
+         Γò╡                              
+                     [32m~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS7006: Parameter 'r' implicitly has 
+an 'any' type.[0m [1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/employees-page/employees
+-page.component.ts:57:25:
+[37m      57 Γöé       list = 
+list.filter([32mr[37m => r.status === 
+status);
+         Γò╡                          
+[32m^[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS7006: Parameter 'r' implicitly has 
+an 'any' type.[0m [1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/employees-page/employees
+-page.component.ts:61:25:
+[37m      61 Γöé       list = 
+list.filter([32mr[37m =>
+         Γò╡                          
+[32m^[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2339: Property 'updateStatus' does 
+not exist on type 
+'ComplianceService'.[0m [1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/employees-page/employees
+-page.component.ts:92:27:
+[37m      92 Γöé     this.complianceServi
+ce.[32mupdateStatus[37m(recordId, 
+newStatus as any);
+         Γò╡                            
+[32m~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2721: Cannot invoke an object which 
+is possibly 'null'.[0m [1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/get-support/get-support.
+component.html:40:20:
+[37m      40 Γöé         <div 
+*ngIf="[32muserRole[37m() === 
+'employee' && policies().length...
+         Γò╡                     
+[32m~~~~~~~~[0m
+
+  Error occurs in the template of 
+component GetSupportComponent.
+
+    src/app/pages/get-support/get-support.
+component.ts:21:15:
+[37m      21 Γöé   templateUrl: 
+[32m'./get-support.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS6234: This expression is not 
+callable because it is a 'get' accessor. 
+Did you mean to use it without '()'?
+  Type 'String' has no call 
+signatures.[0m [1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/get-support/get-support.
+component.html:40:20:
+[37m      40 Γöé         <div 
+*ngIf="[32muserRole[37m() === 
+'employee' && policies().length...
+         Γò╡                     
+[32m~~~~~~~~[0m
+
+  Error occurs in the template of 
+component GetSupportComponent.
+
+    src/app/pages/get-support/get-support.
+component.ts:21:15:
+[37m      21 Γöé   templateUrl: 
+[32m'./get-support.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2339: Property 'name' does not 
+exist on type 'UserProfile'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/hr-dashboard/hr-dashboar
+d.component.ts:53:42:
+[37m      53 Γöé     return this.profileS
+ervice.profile()?.[32mname[37m || 'HR 
+Manager';
+         Γò╡                              
+             [32m~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mNG5002: Parser Error: Unexpected 
+token ')' at column 59 in 
+[passwordData.update(d => ({...d, 
+currentPassword: $event}))] in C:\Users\sw
+eth\Desktop\QWER\angular-app\src\app\pages
+\hr-profile\hr-profile.component.html@185:
+31[0m [1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/hr-profile/hr-profile.co
+mponent.html:186:31:
+[37m      186 Γöé 
+...lChange)="[32mpasswordData.update(d 
+=> ({...d, currentPassword: $e[37m...
+          Γò╡              [32m~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Error occurs in the template of 
+component HRProfileComponent.
+
+    src/app/pages/hr-profile/hr-profile.co
+mponent.ts:18:15:
+[37m      18 Γöé   templateUrl: 
+[32m'./hr-profile.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mNG5002: Parser Error: Unexpected 
+token > at column 24 in 
+[passwordData.update(d => ({...d, 
+currentPassword: $event}))] in C:\Users\sw
+eth\Desktop\QWER\angular-app\src\app\pages
+\hr-profile\hr-profile.component.html@185:
+31[0m [1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/hr-profile/hr-profile.co
+mponent.html:186:31:
+[37m      186 Γöé 
+...lChange)="[32mpasswordData.update(d 
+=> ({...d, currentPassword: $e[37m...
+          Γò╡              [32m~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Error occurs in the template of 
+component HRProfileComponent.
+
+    src/app/pages/hr-profile/hr-profile.co
+mponent.ts:18:15:
+[37m      18 Γöé   templateUrl: 
+[32m'./hr-profile.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2339: Property 'd' does not exist 
+on type 'HRProfileComponent'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/hr-profile/hr-profile.co
+mponent.html:186:51:
+[37m      186 Γöé ...elChange)="passwordD
+ata.update([32md[37m => ({...d, 
+currentPassword: $...
+          Γò╡                             
+      [32m^[0m
+
+  Error occurs in the template of 
+component HRProfileComponent.
+
+    src/app/pages/hr-profile/hr-profile.co
+mponent.ts:18:15:
+[37m      18 Γöé   templateUrl: 
+[32m'./hr-profile.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2345: Argument of type 'undefined' 
+is not assignable to parameter of type 
+'(value: { currentPassword: string; 
+newPassword: string; confirmPassword: 
+string; }) => { currentPassword: string; 
+newPassword: string; confirmPassword: 
+string; }'.[0m [1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/hr-profile/hr-profile.co
+mponent.html:186:51:
+[37m      186 Γöé 
+...ge)="passwordData.update([32md => 
+({...d, currentPassword: $event}[37m))"
+          Γò╡                             
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Error occurs in the template of 
+component HRProfileComponent.
+
+    src/app/pages/hr-profile/hr-profile.co
+mponent.ts:18:15:
+[37m      18 Γöé   templateUrl: 
+[32m'./hr-profile.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mNG5002: Parser Error: Unexpected 
+token ')' at column 55 in 
+[passwordData.update(d => ({...d, 
+newPassword: $event}))] in C:\Users\sweth\
+Desktop\QWER\angular-app\src\app\pages\hr-
+profile\hr-profile.component.html@192:31[
+0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/hr-profile/hr-profile.co
+mponent.html:193:31:
+[37m      193 Γöé 
+...lChange)="[32mpasswordData.update(d 
+=> ({...d, newPassword: $event[37m...
+          Γò╡              [32m~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Error occurs in the template of 
+component HRProfileComponent.
+
+    src/app/pages/hr-profile/hr-profile.co
+mponent.ts:18:15:
+[37m      18 Γöé   templateUrl: 
+[32m'./hr-profile.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mNG5002: Parser Error: Unexpected 
+token > at column 24 in 
+[passwordData.update(d => ({...d, 
+newPassword: $event}))] in C:\Users\sweth\
+Desktop\QWER\angular-app\src\app\pages\hr-
+profile\hr-profile.component.html@192:31[
+0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/hr-profile/hr-profile.co
+mponent.html:193:31:
+[37m      193 Γöé 
+...lChange)="[32mpasswordData.update(d 
+=> ({...d, newPassword: $event[37m...
+          Γò╡              [32m~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Error occurs in the template of 
+component HRProfileComponent.
+
+    src/app/pages/hr-profile/hr-profile.co
+mponent.ts:18:15:
+[37m      18 Γöé   templateUrl: 
+[32m'./hr-profile.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2339: Property 'd' does not exist 
+on type 'HRProfileComponent'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/hr-profile/hr-profile.co
+mponent.html:193:51:
+[37m      193 Γöé ...elChange)="passwordD
+ata.update([32md[37m => ({...d, 
+newPassword: $even...
+          Γò╡                             
+      [32m^[0m
+
+  Error occurs in the template of 
+component HRProfileComponent.
+
+    src/app/pages/hr-profile/hr-profile.co
+mponent.ts:18:15:
+[37m      18 Γöé   templateUrl: 
+[32m'./hr-profile.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2345: Argument of type 'undefined' 
+is not assignable to parameter of type 
+'(value: { currentPassword: string; 
+newPassword: string; confirmPassword: 
+string; }) => { currentPassword: string; 
+newPassword: string; confirmPassword: 
+string; }'.[0m [1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/hr-profile/hr-profile.co
+mponent.html:193:51:
+[37m      193 Γöé 
+...Change)="passwordData.update([32md => 
+({...d, newPassword: $event}[37m))"
+          Γò╡                             
+    
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of 
+component HRProfileComponent.
+
+    src/app/pages/hr-profile/hr-profile.co
+mponent.ts:18:15:
+[37m      18 Γöé   templateUrl: 
+[32m'./hr-profile.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2353: Object literal may only 
+specify known properties, and 'name' does 
+not exist in type 'UserProfile'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/login/login.component.ts
+:53:6:
+[37m      53 Γöé       [32mname[37m,
+         Γò╡       [32m~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2322: Type '"below"' is not 
+assignable to type 'LegendPosition'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/reports/reports.componen
+t.html:174:11:
+[37m      174 Γöé           
+[[32mlegendPosition[37m]="'below'"
+          Γò╡            
+[32m~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of 
+component ReportsComponent.
+
+    src/app/pages/reports/reports.componen
+t.ts:17:15:
+[37m      17 Γöé   templateUrl: 
+[32m'./reports.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2721: Cannot invoke an object which 
+is possibly 'null'.[0m [1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/settings/settings.compon
+ent.html:1:21:
+[37m      1 Γöé <ng-container 
+*ngIf="[32muserRole[37m() === 
+'employee'">
+        Γò╡                      
+[32m~~~~~~~~[0m
+
+  Error occurs in the template of 
+component SettingsComponent.
+
+    src/app/pages/settings/settings.compon
+ent.ts:22:15:
+[37m      22 Γöé   templateUrl: 
+[32m'./settings.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS6234: This expression is not 
+callable because it is a 'get' accessor. 
+Did you mean to use it without '()'?
+  Type 'String' has no call 
+signatures.[0m [1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/settings/settings.compon
+ent.html:1:21:
+[37m      1 Γöé <ng-container 
+*ngIf="[32muserRole[37m() === 
+'employee'">
+        Γò╡                      
+[32m~~~~~~~~[0m
+
+  Error occurs in the template of 
+component SettingsComponent.
+
+    src/app/pages/settings/settings.compon
+ent.ts:22:15:
+[37m      22 Γöé   templateUrl: 
+[32m'./settings.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2721: Cannot invoke an object which 
+is possibly 'null'.[0m [1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/settings/settings.compon
+ent.html:5:21:
+[37m      5 Γöé <ng-container 
+*ngIf="[32muserRole[37m() === 'hr'">
+        Γò╡                      
+[32m~~~~~~~~[0m
+
+  Error occurs in the template of 
+component SettingsComponent.
+
+    src/app/pages/settings/settings.compon
+ent.ts:22:15:
+[37m      22 Γöé   templateUrl: 
+[32m'./settings.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS6234: This expression is not 
+callable because it is a 'get' accessor. 
+Did you mean to use it without '()'?
+  Type 'String' has no call 
+signatures.[0m [1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/settings/settings.compon
+ent.html:5:21:
+[37m      5 Γöé <ng-container 
+*ngIf="[32muserRole[37m() === 'hr'">
+        Γò╡                      
+[32m~~~~~~~~[0m
+
+  Error occurs in the template of 
+component SettingsComponent.
+
+    src/app/pages/settings/settings.compon
+ent.ts:22:15:
+[37m      22 Γöé   templateUrl: 
+[32m'./settings.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mNG5002: Parser Error: Bindings cannot 
+contain assignments at column 20 in [ 
+users().filter(u => u.status === 
+'Active').length ] in C:\Users\sweth\Deskt
+op\QWER\angular-app\src\app\pages\settings
+\settings.component.html@29:96[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/settings/settings.compon
+ent.html:30:96:
+[37m      30 Γöé ...-tighter">[32m{{ 
+users().filter(u => u.status === 
+'Active').length [37m...
+         Γò╡              [32m~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Error occurs in the template of 
+component SettingsComponent.
+
+    src/app/pages/settings/settings.compon
+ent.ts:22:15:
+[37m      22 Γöé   templateUrl: 
+[32m'./settings.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2769: No overload matches this call.
+  Overload 1 of 2, '(predicate: (value: { 
+id: number; name: string; email: string; 
+role: string; status: string; department: 
+string; joinDate: string; }, index: 
+number, array: { id: number; name: 
+string; email: string; role: string; 
+status: string; department: string; 
+joinDate: string; }[]) => value is { ...; 
+}, thisArg?: any): { ...; }[]', gave the 
+following error.
+    Argument of type 'undefined' is not 
+assignable to parameter of type '(value: 
+{ id: number; name: string; email: 
+string; role: string; status: string; 
+department: string; joinDate: string; }, 
+index: number, array: { id: number; name: 
+string; email: string; role: string; 
+status: string; department: string; 
+joinDate: string; }[]) => value is { ...; 
+}'.
+  Overload 2 of 2, '(predicate: (value: { 
+id: number; name: string; email: string; 
+role: string; status: string; department: 
+string; joinDate: string; }, index: 
+number, array: { id: number; name: 
+string; email: string; role: string; 
+status: string; department: string; 
+joinDate: string; }[]) => unknown, 
+thisArg?: any): { ...; }[]', gave the 
+following error.
+    Argument of type 'undefined' is not 
+assignable to parameter of type '(value: 
+{ id: number; name: string; email: 
+string; role: string; status: string; 
+department: string; joinDate: string; }, 
+index: number, array: { id: number; name: 
+string; email: string; role: string; 
+status: string; department: string; 
+joinDate: string; }[]) => unknown'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/settings/settings.compon
+ent.html:30:114:
+[37m      30 Γöé ...ghter">{{ 
+users().filter([32mu => u.status === 
+'Active'[37m).length }}</p>
+         Γò╡                             
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of 
+component SettingsComponent.
+
+    src/app/pages/settings/settings.compon
+ent.ts:22:15:
+[37m      22 Γöé   templateUrl: 
+[32m'./settings.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mNG5002: Parser Error: Bindings cannot 
+contain assignments at column 20 in [ 
+users().filter(u => u.role === 'HR 
+Manager').length ] in C:\Users\sweth\Deskt
+op\QWER\angular-app\src\app\pages\settings
+\settings.component.html@33:96[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/settings/settings.compon
+ent.html:34:96:
+[37m      34 Γöé ...-tighter">[32m{{ 
+users().filter(u => u.role === 'HR 
+Manager').lengt[37m...
+         Γò╡              [32m~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Error occurs in the template of 
+component SettingsComponent.
+
+    src/app/pages/settings/settings.compon
+ent.ts:22:15:
+[37m      22 Γöé   templateUrl: 
+[32m'./settings.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2769: No overload matches this call.
+  Overload 1 of 2, '(predicate: (value: { 
+id: number; name: string; email: string; 
+role: string; status: string; department: 
+string; joinDate: string; }, index: 
+number, array: { id: number; name: 
+string; email: string; role: string; 
+status: string; department: string; 
+joinDate: string; }[]) => value is { ...; 
+}, thisArg?: any): { ...; }[]', gave the 
+following error.
+    Argument of type 'undefined' is not 
+assignable to parameter of type '(value: 
+{ id: number; name: string; email: 
+string; role: string; status: string; 
+department: string; joinDate: string; }, 
+index: number, array: { id: number; name: 
+string; email: string; role: string; 
+status: string; department: string; 
+joinDate: string; }[]) => value is { ...; 
+}'.
+  Overload 2 of 2, '(predicate: (value: { 
+id: number; name: string; email: string; 
+role: string; status: string; department: 
+string; joinDate: string; }, index: 
+number, array: { id: number; name: 
+string; email: string; role: string; 
+status: string; department: string; 
+joinDate: string; }[]) => unknown, 
+thisArg?: any): { ...; }[]', gave the 
+following error.
+    Argument of type 'undefined' is not 
+assignable to parameter of type '(value: 
+{ id: number; name: string; email: 
+string; role: string; status: string; 
+department: string; joinDate: string; }, 
+index: number, array: { id: number; name: 
+string; email: string; role: string; 
+status: string; department: string; 
+joinDate: string; }[]) => unknown'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/settings/settings.compon
+ent.html:34:114:
+[37m      34 Γöé ...ter">{{ 
+users().filter([32mu => u.role === 'HR 
+Manager'[37m).length }}</p>
+         Γò╡                           
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of 
+component SettingsComponent.
+
+    src/app/pages/settings/settings.compon
+ent.ts:22:15:
+[37m      22 Γöé   templateUrl: 
+[32m'./settings.component.html'[37m,
+         Γò╡                
+[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2305: Module '"@angular/core"' has 
+no exported member 'useRef'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/employee-profile/employ
+ee-profile.component.ts:1:44:
+[37m      1 Γöé ...ent, inject, signal, 
+effect, [32museRef[37m, ElementRef, 
+ViewChild } fro...
+        Γò╡                               
+  [32m~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2339: Property 'name' does not 
+exist on type 'UserProfile'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/employee-profile/employ
+ee-profile.component.ts:87:33:
+[37m      87 Γöé         fullName: 
+currentProfile.[32mname[37m,
+         Γò╡                              
+    [32m~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2353: Object literal may only 
+specify known properties, and 'name' does 
+not exist in type 'UserProfile'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/employee-profile/employ
+ee-profile.component.ts:137:6:
+[37m      137 Γöé       [32mname[37m: 
+p.fullName,
+          Γò╡       [32m~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2339: Property 'name' does not 
+exist on type 'UserProfile'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/profile-dropdown/profil
+e-dropdown.component.html:14:25:
+[37m      14 Γöé           
+[alt]="profile.[32mname[37m"
+         Γò╡                          
+[32m~~~~[0m
+
+  Error occurs in the template of 
+component ProfileDropdownComponent.
+
+    src/app/shared/profile-dropdown/profil
+e-dropdown.component.ts:12:15:
+[37m      12 Γöé   templateUrl: [32m'./p
+rofile-dropdown.component.html'[37m,
+         Γò╡                [32m~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2339: Property 'name' does not 
+exist on type 'UserProfile'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/profile-dropdown/profil
+e-dropdown.component.html:18:33:
+[37m      18 Γöé           {{ 
+getInitials(profile.[32mname[37m) }}
+         Γò╡                              
+    [32m~~~~[0m
+
+  Error occurs in the template of 
+component ProfileDropdownComponent.
+
+    src/app/shared/profile-dropdown/profil
+e-dropdown.component.ts:12:15:
+[37m      12 Γöé   templateUrl: [32m'./p
+rofile-dropdown.component.html'[37m,
+         Γò╡                [32m~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2339: Property 'name' does not 
+exist on type 'UserProfile'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/profile-dropdown/profil
+e-dropdown.component.html:25:17:
+[37m      25 Γöé       {{ 
+profile.[32mname[37m.split(' ')[0] }}
+         Γò╡                  
+[32m~~~~[0m
+
+  Error occurs in the template of 
+component ProfileDropdownComponent.
+
+    src/app/shared/profile-dropdown/profil
+e-dropdown.component.ts:12:15:
+[37m      12 Γöé   templateUrl: [32m'./p
+rofile-dropdown.component.html'[37m,
+         Γò╡                [32m~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2339: Property 'name' does not 
+exist on type 'UserProfile'.[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/profile-dropdown/profil
+e-dropdown.component.html:41:19:
+[37m      41 Γöé         {{ 
+profile.[32mname[37m }}
+         Γò╡                    
+[32m~~~~[0m
+
+  Error occurs in the template of 
+component ProfileDropdownComponent.
+
+    src/app/shared/profile-dropdown/profil
+e-dropdown.component.ts:12:15:
+[37m      12 Γöé   templateUrl: [32m'./p
+rofile-dropdown.component.html'[37m,
+         Γò╡                [32m~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mCould not resolve "./pages/hr-manager-
+dashboard/hr-manager-dashboard.component"
+[0m
+
+    src/app/app.routes.ts:22:36:
+[37m      22 Γöé ...=> import([32m'./pag
+es/hr-manager-dashboard/hr-manager-dashboa
+rd.co[37m...
+         Γò╡              [32m~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+[39m[22m

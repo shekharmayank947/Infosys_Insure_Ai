@@ -1,0 +1,8 @@
+
+> angular-app@0.0.0 build
+> ng build
+
+[33m???[39m Building...
+[32m???[39m Building...
+Application bundle generation failed. [9.003 seconds] - 2026-01-05T07:25:22.021Z
+

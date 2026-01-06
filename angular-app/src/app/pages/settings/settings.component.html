@@ -1,0 +1,239 @@
+<ng-container *ngIf="userRole === 'employee'">
+  <app-employee-profile></app-employee-profile>
+</ng-container>
+
+<ng-container *ngIf="userRole === 'hr'">
+  <div class="space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-gray-900 dark:text-white mb-2 text-2xl font-bold">User Management</h1>
+        <p class="text-gray-600 dark:text-gray-400 font-medium">Manage users, roles, and permissions</p>
+      </div>
+      <button
+        (click)="showAddUser.set(true)"
+        class="flex items-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-bold shadow-lg shadow-blue-500/20 active:scale-95"
+      >
+        <lucide-angular [img]="UserPlusIcon" class="w-5 h-5"></lucide-angular>
+        <span>Add New User</span>
+      </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <p class="text-gray-600 dark:text-gray-400 mb-2 font-medium">Total Users</p>
+        <p class="text-gray-900 dark:text-white text-3xl font-black font-mono tracking-tighter">{{ users().length }}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <p class="text-gray-600 dark:text-gray-400 mb-2 font-medium">Active Users</p>
+        <p class="text-gray-900 dark:text-white text-3xl font-black font-mono tracking-tighter">{{ activeUsersCount() }}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <p class="text-gray-600 dark:text-gray-400 mb-2 font-medium">HR Managers</p>
+        <p class="text-gray-900 dark:text-white text-3xl font-black font-mono tracking-tighter">{{ hrManagersCount() }}</p>
+      </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div class="flex flex-col md:flex-row items-center gap-4">
+        <div class="flex-1 relative w-full">
+          <lucide-angular [img]="SearchIcon" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500"></lucide-angular>
+          <input
+            type="text"
+            placeholder="Search users by name, email, or department..."
+            [ngModel]="searchQuery()"
+            (ngModelChange)="searchQuery.set($event)"
+            class="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition placeholder:text-gray-400 dark:placeholder:text-gray-500 font-medium"
+          />
+        </div>
+        <select class="px-4 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none font-semibold text-sm">
+          <option>All Roles</option>
+          <option>HR Manager</option>
+          <option>Employee</option>
+        </select>
+        <select class="px-4 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none font-semibold text-sm">
+          <option>All Status</option>
+          <option>Active</option>
+          <option>Inactive</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 dark:bg-gray-700/50">
+            <tr>
+              <th class="text-left py-4 px-6 text-gray-700 dark:text-gray-300 font-bold uppercase tracking-wider">Name</th>
+              <th class="text-left py-4 px-6 text-gray-700 dark:text-gray-300 font-bold uppercase tracking-wider">Email</th>
+              <th class="text-left py-4 px-6 text-gray-700 dark:text-gray-300 font-bold uppercase tracking-wider">Role</th>
+              <th class="text-left py-4 px-6 text-gray-700 dark:text-gray-300 font-bold uppercase tracking-wider">Department</th>
+              <th class="text-left py-4 px-6 text-gray-700 dark:text-gray-300 font-bold uppercase tracking-wider">Status</th>
+              <th class="text-left py-4 px-6 text-gray-700 dark:text-gray-300 font-bold uppercase tracking-wider">Join Date</th>
+              <th class="text-left py-4 px-6 text-gray-700 dark:text-gray-300 font-bold uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+            <tr *ngFor="let user of filteredUsers" class="hover:bg-gray-50/50 dark:hover:bg-gray-700 transition-colors">
+              <td class="py-4 px-6">
+                <div class="flex items-center space-x-3">
+                  <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold shadow-sm">
+                    {{ user.name.split(' ')[0][0] }}{{ user.name.split(' ')[1]?.[0] || '' }}
+                  </div>
+                  <span class="text-gray-900 dark:text-white font-bold">{{ user.name }}</span>
+                </div>
+              </td>
+              <td class="py-4 px-6 text-gray-600 dark:text-gray-400 font-medium">{{ user.email }}</td>
+              <td class="py-4 px-6">
+                <span
+                  [class]="'px-3 py-1 rounded-full text-[10px] font-black uppercase ' + (
+                    user.role === 'HR Manager'
+                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'
+                  )"
+                >
+                  {{ user.role }}
+                </span>
+              </td>
+              <td class="py-4 px-6 text-gray-600 dark:text-gray-400 font-medium">{{ user.department }}</td>
+              <td class="py-4 px-6">
+                <span
+                  [class]="'px-3 py-1 rounded-full text-[10px] font-black uppercase ' + (
+                    user.status === 'Active'
+                      ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                      : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+                  )"
+                >
+                  {{ user.status }}
+                </span>
+              </td>
+              <td class="py-4 px-6 text-gray-600 dark:text-gray-400 font-medium font-mono text-xs">{{ user.joinDate }}</td>
+              <td class="py-4 px-6">
+                <div class="flex items-center space-x-1">
+                  <button
+                    class="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-xl transition"
+                    title="Edit user"
+                  >
+                    <lucide-angular [img]="EditIcon" class="w-4.5 h-4.5"></lucide-angular>
+                  </button>
+                  <button
+                    (click)="handleResetPassword(user.name)"
+                    class="p-2 text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/30 rounded-xl transition"
+                    title="Reset password"
+                  >
+                    <lucide-angular [img]="KeyIcon" class="w-4.5 h-4.5"></lucide-angular>
+                  </button>
+                  <button
+                    (click)="handleDeleteUser(user.id, user.name)"
+                    class="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition"
+                    title="Delete user"
+                  >
+                    <lucide-angular [img]="Trash2Icon" class="w-4.5 h-4.5"></lucide-angular>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex items-center justify-between px-6 py-5 border-t border-gray-100 dark:border-gray-700 bg-gray-50/30 dark:bg-gray-800/50">
+        <p class="text-gray-500 dark:text-gray-500 text-xs font-bold">Showing <span class="text-gray-900 dark:text-white">{{ filteredUsers.length }}</span> of <span class="text-gray-900 dark:text-white">{{ users().length }}</span> users</p>
+        <div class="flex space-x-2">
+          <button class="px-3.5 py-1.5 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition text-xs font-bold">
+            Previous
+          </button>
+          <button class="px-3.5 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-black shadow-lg shadow-blue-500/20">
+            1
+          </button>
+          <button class="px-3.5 py-1.5 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition text-xs font-bold">
+            2
+          </button>
+          <button class="px-3.5 py-1.5 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition text-xs font-bold">
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div *ngIf="showAddUser()" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-8 shadow-2xl scale-in ring-1 ring-black/5">
+        <h3 class="text-gray-900 dark:text-white mb-6 text-xl font-black">Add New User</h3>
+        
+        <div class="space-y-5">
+          <div>
+            <label class="block text-gray-700 dark:text-gray-300 mb-2 text-xs font-bold uppercase tracking-wider">Full Name</label>
+            <input
+              type="text"
+              placeholder="John Doe"
+              [(ngModel)]="newUserName"
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition font-medium"
+            />
+          </div>
+
+          <div>
+            <label class="block text-gray-700 dark:text-gray-300 mb-2 text-xs font-bold uppercase tracking-wider">Email Address</label>
+            <div class="relative">
+              <lucide-angular [img]="MailIcon" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500"></lucide-angular>
+              <input
+                type="email"
+                placeholder="john@company.com"
+                [(ngModel)]="newUserEmail"
+                class="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition font-medium"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-gray-700 dark:text-gray-300 mb-2 text-xs font-bold uppercase tracking-wider">Role</label>
+              <select
+                [(ngModel)]="newUserRole"
+                class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none font-bold text-sm"
+              >
+                <option>Employee</option>
+                <option>HR Manager</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-gray-700 dark:text-gray-300 mb-2 text-xs font-bold uppercase tracking-wider">Department</label>
+              <select
+                [(ngModel)]="newUserDepartment"
+                class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none font-bold text-sm"
+              >
+                <option>Engineering</option>
+                <option>Sales</option>
+                <option>Marketing</option>
+                <option>HR</option>
+                <option>Finance</option>
+                <option>Operations</option>
+                <option>IT</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex space-x-3 mt-8">
+          <button
+            (click)="handleAddUser()"
+            class="flex-1 px-6 py-3.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-black shadow-lg shadow-blue-500/20 active:scale-95"
+          >
+            Add User
+          </button>
+          <button
+            (click)="showAddUser.set(false)"
+            class="flex-1 px-6 py-3.5 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition font-bold"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

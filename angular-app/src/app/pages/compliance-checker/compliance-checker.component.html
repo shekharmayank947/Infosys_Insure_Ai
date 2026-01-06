@@ -1,0 +1,254 @@
+<div class="max-w-6xl mx-auto space-y-6">
+  <!-- Header -->
+  <div>
+    <h1 class="text-gray-900 dark:text-white mb-2 text-2xl font-bold">AI Compliance Checker</h1>
+    <p class="text-gray-600 dark:text-gray-400">Upload documents and let AI analyze them for compliance issues and risks</p>
+  </div>
+
+  <!-- Input Section -->
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div class="flex space-x-4 mb-6 border-b border-gray-200 dark:border-gray-700">
+      <button
+        (click)="activeTab.set('upload')"
+        [class]="'pb-3 px-4 transition font-medium ' + (activeTab() === 'upload' ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200')"
+      >
+        Upload Document
+      </button>
+      <button
+        (click)="activeTab.set('paste')"
+        [class]="'pb-3 px-4 transition font-medium ' + (activeTab() === 'paste' ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200')"
+      >
+        Paste Text
+      </button>
+    </div>
+
+    <div *ngIf="activeTab() === 'upload'">
+      <div
+        (dragenter)="handleDrag($event)"
+        (dragleave)="handleDrag($event)"
+        (dragover)="handleDrag($event)"
+        (drop)="handleDrop($event)"
+        [class]="'border-2 border-dashed rounded-xl p-12 text-center transition ' + (dragActive() ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/10' : uploadedFile() ? 'border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/10' : 'border-gray-300 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500')"
+      >
+        <div *ngIf="uploadedFile()" class="flex flex-col items-center">
+          <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-4">
+            <lucide-angular [img]="FileIcon" class="w-8 h-8 text-green-600 dark:text-green-400"></lucide-angular>
+          </div>
+          <p class="text-gray-900 dark:text-white mb-2 font-semibold">{{ uploadedFile()?.name }}</p>
+          <p class="text-gray-600 dark:text-gray-400 mb-4 text-xs font-medium">
+            {{ (uploadedFile()!.size / 1024).toFixed(2) }} KB
+          </p>
+          <button
+            (click)="handleRemoveFile()"
+            class="flex items-center space-x-2 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium"
+          >
+            <lucide-angular [img]="Trash2Icon" class="w-4 h-4"></lucide-angular>
+            <span>Remove File</span>
+          </button>
+        </div>
+        
+        <div *ngIf="!uploadedFile()" class="flex flex-col items-center">
+          <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-4">
+            <lucide-angular [img]="UploadIcon" class="w-8 h-8 text-blue-600 dark:text-blue-400"></lucide-angular>
+          </div>
+          <p class="text-gray-900 dark:text-white mb-2 font-medium">
+            Drag & drop your document here, or click to browse
+          </p>
+          <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">PDF, DOC, DOCX formats supported (Max 10MB)</p>
+          <label class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer transition font-semibold">
+            Choose File
+            <input
+              type="file"
+              class="hidden"
+              accept=".pdf,.doc,.docx"
+              (change)="handleFileChange($event)"
+            />
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="activeTab() === 'paste'">
+      <textarea
+        [ngModel]="policyText()"
+        (ngModelChange)="policyText.set($event)"
+        placeholder="Paste your policy text here for AI analysis..."
+        rows="12"
+        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none transition placeholder:text-gray-400 dark:placeholder:text-gray-500"
+      ></textarea>
+      <p class="text-gray-500 dark:text-gray-400 mt-2 text-xs font-medium">
+        {{ policyText().length }} characters
+      </p>
+    </div>
+
+    <button
+      (click)="handleAnalyze()"
+      [disabled]="analyzing()"
+      class="mt-8 w-full flex items-center justify-center space-x-2 px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed font-bold shadow-lg"
+    >
+      <ng-container *ngIf="analyzing()">
+        <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+        <span>Analyzing Compliance with AI...</span>
+      </ng-container>
+      <ng-container *ngIf="!analyzing()">
+        <lucide-angular [img]="SparklesIcon" class="w-5 h-5"></lucide-angular>
+        <span>Run AI Compliance Check</span>
+      </ng-container>
+    </button>
+  </div>
+
+  <!-- Results Section -->
+  <div *ngIf="analyzed()" class="space-y-6">
+    <!-- Compliance Score -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-gray-900 dark:text-white text-lg font-semibold">Overall Compliance Score</h3>
+        <div class="flex items-center space-x-2 bg-purple-50 dark:bg-purple-900/20 px-4 py-1.5 rounded-full border border-purple-100 dark:border-purple-800">
+          <lucide-angular [img]="SparklesIcon" class="w-4 h-4 text-purple-600 dark:text-purple-400"></lucide-angular>
+          <span class="text-purple-600 dark:text-purple-400 text-xs font-bold uppercase tracking-wider">AI Powered</span>
+        </div>
+      </div>
+      
+      <div class="flex items-center space-x-8 flex-wrap lg:flex-nowrap">
+        <div class="flex-1 min-w-[300px]">
+          <div class="flex items-end justify-between mb-3 px-1">
+            <span class="text-gray-700 dark:text-gray-300 font-medium">Compliance Level</span>
+            <span class="text-gray-900 dark:text-white font-bold">{{ complianceResults.score }}/100</span>
+          </div>
+          <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-4 overflow-hidden shadow-inner">
+            <div
+              class="bg-gradient-to-r from-amber-500 to-orange-600 h-4 rounded-full transition-all duration-1000"
+              [style.width.%]="complianceResults.score"
+            ></div>
+          </div>
+          <p class="text-gray-600 dark:text-gray-400 mt-3 text-sm font-medium">Moderate Risk - Requires immediate attention</p>
+        </div>
+        <div class="text-center p-4 bg-amber-50 dark:bg-amber-900/10 rounded-2xl border border-amber-100 dark:border-amber-800">
+          <div class="text-amber-600 dark:text-amber-400 mb-2">
+            <lucide-angular [img]="AlertTriangleIcon" class="w-12 h-12 mx-auto"></lucide-angular>
+          </div>
+          <p class="text-gray-700 dark:text-gray-300 font-bold uppercase tracking-tighter text-xs">Compliance Warning</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Missing Clauses -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div class="flex items-center space-x-2 mb-6">
+        <lucide-angular [img]="XCircleIcon" class="w-6 h-6 text-red-600 dark:text-red-400"></lucide-angular>
+        <h3 class="text-gray-900 dark:text-white text-lg font-semibold">Missing Clauses</h3>
+        <span class="bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 px-3 py-0.5 rounded-full text-xs font-bold">
+          {{ complianceResults.missingClauses.length }} issues
+        </span>
+      </div>
+      
+      <div class="space-y-4">
+        <div
+          *ngFor="let clause of complianceResults.missingClauses"
+          class="p-5 border-l-4 border-red-500 dark:border-red-400 bg-gray-50 dark:bg-gray-900/50 rounded-r-xl transition hover:bg-gray-100 dark:hover:bg-gray-900"
+        >
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div class="flex-1">
+              <div class="flex items-center space-x-3 mb-2">
+                <p class="text-gray-900 dark:text-white font-bold">{{ clause.clause }}</p>
+                <span
+                  [class]="'px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ' + (clause.severity === 'high' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400' : 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400')"
+                >
+                  {{ clause.severity }}
+                </span>
+              </div>
+              <p class="text-gray-700 dark:text-gray-400 text-sm">{{ clause.description }}</p>
+            </div>
+            <button
+              (click)="handleSubmitToHR(clause, 'missing-clause')"
+              class="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold text-sm shadow-sm whitespace-nowrap"
+            >
+              Submit to HR
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- High-Risk Conditions -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div class="flex items-center space-x-2 mb-6">
+        <lucide-angular [img]="AlertTriangleIcon" class="w-6 h-6 text-amber-600 dark:text-amber-400"></lucide-angular>
+        <h3 class="text-gray-900 dark:text-white text-lg font-semibold">High-Risk Conditions Detected</h3>
+        <span class="bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-3 py-0.5 rounded-full text-xs font-bold">
+          {{ complianceResults.highRiskConditions.length }} risks
+        </span>
+      </div>
+      
+      <div class="space-y-4">
+        <div
+          *ngFor="let risk of complianceResults.highRiskConditions"
+          class="p-5 border-l-4 border-amber-500 dark:border-amber-400 bg-gray-50 dark:bg-gray-900/50 rounded-r-xl transition hover:bg-gray-100 dark:hover:bg-gray-900"
+        >
+          <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+            <div>
+              <div class="flex items-center space-x-3 mb-2">
+                <p class="text-gray-900 dark:text-white font-bold">{{ risk.condition }}</p>
+                <span
+                  [class]="'px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ' + (risk.severity === 'critical' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400' : 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400')"
+                >
+                  {{ risk.severity }}
+                </span>
+              </div>
+              <p class="text-gray-700 dark:text-gray-400 text-sm mb-3">{{ risk.description }}</p>
+              <div class="flex items-center space-x-2 text-gray-500 dark:text-gray-500 text-xs font-medium">
+                <lucide-angular [img]="InfoIcon" class="w-3.5 h-3.5"></lucide-angular>
+                <span>Found in: {{ risk.location }}</span>
+              </div>
+            </div>
+            <button
+              (click)="handleSubmitToHR(risk, 'high-risk')"
+              class="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold text-sm shadow-sm whitespace-nowrap"
+            >
+              Submit to HR
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Recommendations -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div class="flex items-center space-x-2 mb-6">
+        <lucide-angular [img]="CheckCircleIcon" class="w-6 h-6 text-green-600 dark:text-green-400"></lucide-angular>
+        <h3 class="text-gray-900 dark:text-white text-lg font-semibold">AI Recommendations</h3>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div
+          *ngFor="let rec of complianceResults.recommendations"
+          class="p-5 border border-gray-100 dark:border-gray-700 rounded-2xl hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition bg-white dark:bg-gray-800 group"
+        >
+          <div class="flex items-start space-x-4">
+            <div class="w-10 h-10 bg-green-50 dark:bg-green-900/20 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-green-100 dark:group-hover:bg-green-900/40 transition">
+              <lucide-angular [img]="CheckCircleIcon" class="w-5 h-5 text-green-600 dark:text-green-400"></lucide-angular>
+            </div>
+            <div>
+              <p class="text-gray-900 dark:text-white font-bold mb-1">{{ rec.title }}</p>
+              <p class="text-gray-600 dark:text-gray-400 text-xs leading-relaxed">{{ rec.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+      <button
+        (click)="handleDownloadReport()"
+        class="flex-1 px-8 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-bold shadow-lg flex items-center justify-center space-x-3"
+      >
+        <lucide-angular [img]="FileTextIcon" class="w-5 h-5"></lucide-angular>
+        <span>Download Full Report</span>
+      </button>
+      <button class="flex-1 px-8 py-4 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition font-bold shadow-md">
+        Export to PDF
+      </button>
+    </div>
+  </div>
+</div>
